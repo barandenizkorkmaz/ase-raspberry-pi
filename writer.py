@@ -22,6 +22,7 @@ try:
             id, data = reader.read()
             print(f"ID: {id}\Data: {id, data}")
             new_data = input("New Data: ")
+            print(f'Writing the following text to card: {new_data}')
             reader.write(new_data.strip())
             print('The data has been successfully written. You can remove your tag.')
             sleep(5)
