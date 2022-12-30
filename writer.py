@@ -17,13 +17,16 @@ GPIO.setup(RFID_READER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 try:
     while True:
-        print('Hold a tag near the reader.')
-        id, data = reader.read()
-        print(f"ID: {id}\Data: {id, data}")
-        new_data = input("New Data: ")
-        reader.write(new_data.strip())
-        print('The data has been successfully written. You can remove your tag.')
-        sleep(5)
+        try:
+            print('Hold a tag near the reader.')
+            id, data = reader.read()
+            print(f"ID: {id}\Data: {id, data}")
+            new_data = input("New Data: ")
+            reader.write(new_data.strip())
+            print('The data has been successfully written. You can remove your tag.')
+            sleep(5)
+        except:
+            print('Error while writing data, please try again.')
 except KeyboardInterrupt:
     GPIO.cleanup()
     raise
