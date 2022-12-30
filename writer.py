@@ -20,12 +20,12 @@ try:
         try:
             print('Hold a tag near the reader.')
             id, data = reader.read()
-            print(f"ID: {id}\Data: {id, data}")
-            new_data = input("New Data: ")
+            print(f"ID: {id}\Data: {data}")
+            new_data = input("New Data: ").rstrip()
             print(f'Writing the following text to card: {new_data}')
-            reader.write(new_data.strip())
+            reader.write(new_data)
             print('The data has been successfully written. You can remove your tag.')
-            sleep(5)
+            sleep(1)
         except RuntimeError:
             print('Error while writing data, please try again.')
             GPIO.cleanup()
