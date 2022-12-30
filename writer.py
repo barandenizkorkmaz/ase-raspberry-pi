@@ -26,8 +26,10 @@ try:
             reader.write(new_data.strip())
             print('The data has been successfully written. You can remove your tag.')
             sleep(5)
-        except:
+        except RuntimeError:
             print('Error while writing data, please try again.')
+            GPIO.cleanup()
+            raise
 except KeyboardInterrupt:
     GPIO.cleanup()
     raise
