@@ -21,7 +21,7 @@ GPIO.setup(RFID_READER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 def light_led(color, seconds=3):
     GPIO.output(color, GPIO.HIGH)
     sleep(seconds)
-    GPIO.output(coor, GPIO.LOW)
+    GPIO.output(color, GPIO.LOW)
 
 def authenticate(user_id):
     f = open(CONFIG_PATH)
