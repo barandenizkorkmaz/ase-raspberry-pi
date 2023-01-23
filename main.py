@@ -52,7 +52,16 @@ def blink_led(color, seconds=0.1):
 def boxUnlock(rfId):
     global session
     params = {
-        "id": BOX_ID
+        "mode": "cors",
+        "cache": "no-cache",
+        "credentials": "include",
+        "redirect": "follow",
+        "referrerPolicy": "origin-when-cross-origin"
+    }
+    headers = {
+        "Content−Type": "application/json",
+        "X-XSRF-Token": "",
+        "Authorization": ""
     }
     content = {
         "rfid": rfId
@@ -61,7 +70,7 @@ def boxUnlock(rfId):
     result = session.post(
         url=f'{HOST_URL}/box/unlock/{BOX_ID}',
         params=params,
-        headers='',
+        headers='', # TODO: Connect headers.
         json=content
     
     )
@@ -73,7 +82,11 @@ def boxUnlock(rfId):
 def boxLock(rfId):
     global session
     params = {
-        "id": BOX_ID
+        "mode": "cors",
+        "cache": "no-cache",
+        "credentials": "include",
+        "redirect": "follow",
+        "referrerPolicy": "origin-when-cross-origin"
     }
     content = {
         "rfid": rfId
@@ -82,13 +95,22 @@ def boxLock(rfId):
     result = session.post(
         url=f'{HOST_URL}/box/lock/{BOX_ID}',
         params=params,
-        headers='',
+        headers='', # TODO: Connect headers.
         json=content
     
     )
     print("Received the following box lock response from the server.")
     print(result)
     print(f"Status Code: {result.status_code}")
+
+def httpRequest(method, url, params, headers, content):
+    if method == "GET":
+        res = session.get(url, params=params)
+        return res
+    elif method == "POST":
+        res = session.post(url, params=params, headers=headers, json=content)
+    else:
+        raise ValueError("Method Not Found")
 
 try:
     while True:
@@ -111,6 +133,7 @@ try:
         print("### Welcome to ASE Delivery ###")
         print(f"### Box Information ### \nId: {BOX_ID}\nName: {BOX_NAME}\nAddress: {BOX_ADDRESS}\nRaspberry ID: {BOX_RASPBERRY_ID}")
         print("Please scan your RFID tag to device.")
+        # TODO: 30.12.2022 Ensure that the card has been successfully read.
         cardId, rfId = reader.read()
         rfId = rfId.strip()
         print(f"The tag has been successfully scanned.\nID: {cardId}\RfId: {rfId}")
