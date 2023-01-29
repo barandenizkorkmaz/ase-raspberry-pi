@@ -15,11 +15,11 @@ BOX_DATA = initializeBox()
 BOX_ID = BOX_DATA['id']
 BOX_NAME = BOX_DATA['name']
 BOX_ADDRESS = BOX_DATA['address']
-BOX_RASPBERRY_ID = BOX_DATA['raspberryId']
 
-HOST_NAME = '192.168.68.123'
-PORT = 8083
+HOST_NAME = '172.17.0.1'
+PORT = 10789
 HOST_URL = f'http://{HOST_NAME}:{str(PORT)}'
+XSRF_TOKEN = None
 
 GREEN_PIN = 38
 RED_PIN= 37
@@ -51,6 +51,7 @@ def blink_led(color, seconds=0.1):
 
 def boxUnlock(rfId):
     global session
+    url = f'{HOST_URL}/box/unlock/{BOX_ID}'
     params = {
         "mode": "cors",
         "cache": "no-cache",
@@ -60,20 +61,13 @@ def boxUnlock(rfId):
     }
     headers = {
         "Content−Type": "application/json",
-        "X-XSRF-Token": "",
-        "Authorization": ""
+        "X-XSRF-Token": XSRF_TOKEN,
     }
     content = {
         "rfid": rfId
     }
     print("Sending box unlock request to the server.")
-    result = session.post(
-        url=f'{HOST_URL}/box/unlock/{BOX_ID}',
-        params=params,
-        headers='', # TODO: Connect headers.
-        json=content
-    
-    )
+    result = httpRequest('POST', url, params, headers, content)
     print("Received the following box unlock response from the server.")
     print(result)
     print(f"Status Code: {result.status_code}")
@@ -81,6 +75,7 @@ def boxUnlock(rfId):
 
 def boxLock(rfId):
     global session
+    url = f'{HOST_URL}/box/lock/{BOX_ID}'
     params = {
         "mode": "cors",
         "cache": "no-cache",
@@ -88,29 +83,43 @@ def boxLock(rfId):
         "redirect": "follow",
         "referrerPolicy": "origin-when-cross-origin"
     }
+    headers = {
+        "Content−Type": "application/json",
+        "X-XSRF-Token": XSRF_TOKEN,
+    }
     content = {
         "rfid": rfId
     }
-    print("Sending box lock request to the server.")
-    result = session.post(
-        url=f'{HOST_URL}/box/lock/{BOX_ID}',
-        params=params,
-        headers='', # TODO: Connect headers.
-        json=content
-    
-    )
-    print("Received the following box lock response from the server.")
+    print("Sending box unlock request to the server.")
+    result = httpRequest('POST', url, params, headers, content)
+    print("Received the following box unlock response from the server.")
     print(result)
     print(f"Status Code: {result.status_code}")
+    return result.status_code == 200
+
+def getXSRFToken():
+    print('Receiving XSRF Token')
+    global session, XSRF_TOKEN
+    params = {
+        "mode": "cors",
+        "cache": "no-cache",
+        "credentials": "include",
+        "redirect": "follow",
+        "referrerPolicy": "origin-when-cross-origin"
+    }
+    res = httpRequest("GET", f"{HOST_URL}/box/", params, None, None)
+    print(res)
+    print(session.cookies)
 
 def httpRequest(method, url, params, headers, content):
+    res = None
     if method == "GET":
         res = session.get(url, params=params)
-        return res
     elif method == "POST":
         res = session.post(url, params=params, headers=headers, json=content)
     else:
         raise ValueError("Method Not Found")
+    return res
 
 try:
     while True:
@@ -131,10 +140,12 @@ try:
             Sleep for 1 secs
         """
         print("### Welcome to ASE Delivery ###")
-        print(f"### Box Information ### \nId: {BOX_ID}\nName: {BOX_NAME}\nAddress: {BOX_ADDRESS}\nRaspberry ID: {BOX_RASPBERRY_ID}")
+        print(f"### Box Information ### \nId: {BOX_ID}\nName: {BOX_NAME}\nAddress: {BOX_ADDRESS}")
         print("Please scan your RFID tag to device.")
         # TODO: 30.12.2022 Ensure that the card has been successfully read.
         cardId, rfId = reader.read()
+        while(cardId is None or rfId is None):
+            cardId, rfId = reader.read()
         rfId = rfId.strip()
         print(f"The tag has been successfully scanned.\nID: {cardId}\RfId: {rfId}")
         if(boxUnlock(rfId)):
