@@ -16,7 +16,7 @@ BOX_ID = BOX_DATA['id']
 BOX_NAME = BOX_DATA['name']
 BOX_ADDRESS = BOX_DATA['address']
 
-HOST_NAME = '172.17.0.1'
+HOST_NAME = '192.168.178.39'
 PORT = 10789
 HOST_URL = f'http://{HOST_NAME}:{str(PORT)}'
 XSRF_TOKEN = None
@@ -61,7 +61,7 @@ def boxUnlock(rfId):
     }
     headers = {
         "Content−Type": "application/json",
-        "X-XSRF-Token": XSRF_TOKEN,
+        "X-XSRF-Token": session.cookies.get('XSRF-TOKEN'),
     }
     content = {
         "rfid": rfId
@@ -85,7 +85,7 @@ def boxLock(rfId):
     }
     headers = {
         "Content−Type": "application/json",
-        "X-XSRF-Token": XSRF_TOKEN,
+        "X-XSRF-Token": session.cookies.get('XSRF-TOKEN'),
     }
     content = {
         "rfid": rfId
@@ -99,7 +99,7 @@ def boxLock(rfId):
 
 def getXSRFToken():
     print('Receiving XSRF Token')
-    global session, XSRF_TOKEN
+    global session
     params = {
         "mode": "cors",
         "cache": "no-cache",
@@ -107,9 +107,7 @@ def getXSRFToken():
         "redirect": "follow",
         "referrerPolicy": "origin-when-cross-origin"
     }
-    res = httpRequest("GET", f"{HOST_URL}/box/", params, None, None)
-    print(res)
-    print(session.cookies)
+    httpRequest("GET", f"{HOST_URL}/box/", params, None, None)
 
 def httpRequest(method, url, params, headers, content):
     res = None
@@ -149,7 +147,6 @@ try:
         rfId = rfId.strip()
         print(f"The tag has been successfully scanned.\nID: {cardId}\RfId: {rfId}")
         getXSRFToken()
-        '''
         if(boxUnlock(rfId)):
             light_led(GREEN_PIN)
             now = time.time()
@@ -161,7 +158,6 @@ try:
         else:
             light_led(RED_PIN)
         print("Please wait until the device has been restarted")
-        '''
         sleep(0.5)
 except KeyboardInterrupt:
     GPIO.cleanup()

@@ -1,3 +1,4 @@
+import requests
 from requests import Session
 
 HOST_NAME = '172.17.0.1'
@@ -5,7 +6,7 @@ PORT = 10789
 HOST_URL = f'http://{HOST_NAME}:{str(PORT)}'
 XSRF_TOKEN = None
 
-session = Session()
+session = requests.Session()
 
 def getXSRFToken():
     print('Receiving XSRF Token')
