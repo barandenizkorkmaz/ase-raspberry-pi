@@ -61,7 +61,7 @@ def boxUnlock(rfId):
     }
     headers = {
         "Content−Type": "application/json",
-        "X-XSRF-Token": session.cookies.get('XSRF-TOKEN'),
+        "X-XSRF-TOKEN": session.cookies.get('XSRF-TOKEN'),
     }
     content = {
         "rfid": rfId
@@ -85,7 +85,7 @@ def boxLock(rfId):
     }
     headers = {
         "Content−Type": "application/json",
-        "X-XSRF-Token": session.cookies.get('XSRF-TOKEN'),
+        "X-XSRF-TOKEN": session.cookies.get('XSRF-TOKEN'),
     }
     content = {
         "rfid": rfId
@@ -108,6 +108,8 @@ def getXSRFToken():
         "referrerPolicy": "origin-when-cross-origin"
     }
     httpRequest("GET", f"{HOST_URL}/box/", params, None, None)
+    print('Received XSRF Token')
+    print(session.cookies.get('XSRF-TOKEN'))
 
 def httpRequest(method, url, params, headers, content):
     res = None
