@@ -148,6 +148,8 @@ try:
             cardId, rfId = reader.read()
         rfId = rfId.strip()
         print(f"The tag has been successfully scanned.\nID: {cardId}\RfId: {rfId}")
+        getXSRFToken()
+        '''
         if(boxUnlock(rfId)):
             light_led(GREEN_PIN)
             now = time.time()
@@ -159,6 +161,7 @@ try:
         else:
             light_led(RED_PIN)
         print("Please wait until the device has been restarted")
+        '''
         sleep(0.5)
 except KeyboardInterrupt:
     GPIO.cleanup()
