@@ -53,12 +53,12 @@ def boxUnlock(rfId):
     global session
     url = f'{HOST_URL}/box/unlock/{BOX_ID}'
     params = {
-        "mode": "cors",
-        "referrerPolicy": "origin-when-cross-origin"
     }
     headers = {
         "Content-Type": "application/json",
         "X-XSRF-TOKEN": session.cookies.get('XSRF-TOKEN'),
+        "mode": "cors",
+        "referrerPolicy": "origin-when-cross-origin"
     }
     content = {
         "rfid": rfId
@@ -74,12 +74,12 @@ def boxLock(rfId):
     global session
     url = f'{HOST_URL}/box/lock/{BOX_ID}'
     params = {
-        "mode": "cors",
-        "referrerPolicy": "origin-when-cross-origin"
     }
     headers = {
         "Content-Type": "application/json",
         "X-XSRF-TOKEN": session.cookies.get('XSRF-TOKEN'),
+        "mode": "cors",
+        "referrerPolicy": "origin-when-cross-origin"
     }
     content = {
         "rfid": rfId
