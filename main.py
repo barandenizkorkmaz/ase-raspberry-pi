@@ -60,7 +60,6 @@ def boxUnlock(rfId):
         "referrerPolicy": "origin-when-cross-origin"
     }
     headers = {
-        "Content−Type": "application/json",
         "X-XSRF-TOKEN": session.cookies.get('XSRF-TOKEN'),
     }
     content = {
@@ -84,7 +83,6 @@ def boxLock(rfId):
         "referrerPolicy": "origin-when-cross-origin"
     }
     headers = {
-        "Content−Type": "application/json",
         "X-XSRF-TOKEN": session.cookies.get('XSRF-TOKEN'),
     }
     content = {
