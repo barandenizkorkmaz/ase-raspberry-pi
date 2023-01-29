@@ -54,9 +54,6 @@ def boxUnlock(rfId):
     url = f'{HOST_URL}/box/unlock/{BOX_ID}'
     params = {
         "mode": "cors",
-        "cache": "no-cache",
-        "credentials": "include",
-        "redirect": "follow",
         "referrerPolicy": "origin-when-cross-origin"
     }
     headers = {
@@ -77,9 +74,6 @@ def boxLock(rfId):
     url = f'{HOST_URL}/box/lock/{BOX_ID}'
     params = {
         "mode": "cors",
-        "cache": "no-cache",
-        "credentials": "include",
-        "redirect": "follow",
         "referrerPolicy": "origin-when-cross-origin"
     }
     headers = {
@@ -145,7 +139,7 @@ try:
         while(cardId is None or rfId is None):
             cardId, rfId = reader.read()
         rfId = rfId.strip()
-        print(f"The tag has been successfully scanned.\nID: {cardId}\RfId: {rfId}")
+        print(f"The tag has been successfully scanned.\nID: {cardId}\tRfId: {rfId}")
         getXSRFToken()
         if(boxUnlock(rfId)):
             light_led(GREEN_PIN)
