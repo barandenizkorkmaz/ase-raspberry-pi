@@ -155,4 +155,4 @@ if __name__=='__main__':
 
     reader = SimpleMFRC522()
     session = requests.Session()
-    pass
+    main()
