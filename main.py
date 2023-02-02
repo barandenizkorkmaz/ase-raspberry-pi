@@ -87,7 +87,6 @@ def getXSRFToken():
     }
     httpRequest("GET", f"{HOST_URL}/box/", params, None, None)
     print('Finished: Received XSRF Token')
-    print(session.cookies.get('XSRF-TOKEN'))
 
 def httpRequest(method, url, params, headers, content):
     res = None
