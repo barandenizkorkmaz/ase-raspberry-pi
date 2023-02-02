@@ -19,7 +19,7 @@ def parse_args():
         epilog='WS22/23'
     )
     # Add an argument
-    parser.add_argument('--host', type=str, default="localhost")
+    parser.add_argument('--host', type=str, required=True)
     parser.add_argument('--port', type=str, default="10789")
     parser.add_argument('--config', type=str, default='config.json')
     return parser.parse_args()
